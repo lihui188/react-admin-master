@@ -1,18 +1,38 @@
 import React, { Component } from "react"
 import "./css/index.less"
-import { Form, Input, Button } from "antd"
+import { Form, Input, Button, message } from "antd"
 import { UserOutlined, LockOutlined } from "@ant-design/icons"
-import {encrypt} from '../../utils/js-crypto'
-const onFinish = (values) => {
-  console.log(values)
-  console.log(encrypt(values.password))
-}
+import { encrypt } from "../../utils/js-crypto"
+import { login } from "../../api/get_data/login"
+import { storage } from "../../utils/storage"
+import { Redirect } from "react-router-dom"
+
+// const
+/* .catch(err=>{
+    console.log(err.response)
+  }) 
+}*/
 
 /* const onFinishFailed = (errorInfo) => {
   console.log("Failed:", errorInfo)
 } */
 export default class Login extends Component {
+  onFinish = (values) => {
+    login({
+      username: values.username,
+      password: encrypt(values.password),
+    }).then((res) => {
+      message.success("登录成功")
+      storage.setMemoryPmt("token", res.token)
+      storage.setMemoryPmt("userInfo", res.userInfo)
+      this.props.history.push("/")
+    })
+  }
   render() {
+    const token = storage.getMemoryPmt("token") || ""
+    if (token) {
+      return <Redirect to="/" />
+    }
     return (
       <div className="login_container">
         <div className="wrapper">
@@ -29,7 +49,7 @@ export default class Login extends Component {
               /* initialValues={{
                 remember: true,
               }} */
-              onFinish={onFinish}
+              onFinish={this.onFinish}
               autoComplete="off">
               <Form.Item
                 name="username"
@@ -39,7 +59,11 @@ export default class Login extends Component {
                     message: "请输入用户名！",
                   },
                 ]}>
-                <Input placeholder="用户名" maxLength="12" prefix={<UserOutlined />} />
+                <Input
+                  placeholder="用户名"
+                  maxLength="12"
+                  prefix={<UserOutlined />}
+                />
               </Form.Item>
 
               <Form.Item
@@ -58,7 +82,11 @@ export default class Login extends Component {
                     message: "最大16位字符！",
                   },
                 ]}>
-                <Input.Password maxLength="16" placeholder="密码" prefix={<LockOutlined />} />
+                <Input.Password
+                  maxLength="16"
+                  placeholder="密码"
+                  prefix={<LockOutlined />}
+                />
               </Form.Item>
               <Form.Item
                 wrapperCol={{
