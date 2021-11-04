@@ -1,0 +1,30 @@
+@images: "../../../assets/images";
+.login_container {
+  width: 100%;
+  height: 100%;
+  background-image: url("@{images}/login_bg.jpg");
+  background-size: 100% 100%;
+  position: relative;
+  .wrapper {
+    position: absolute;
+    top: 50%;
+    left: 70%;
+    width: 320px;
+    height: 280px;
+    // background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255);
+    transform: translate(-50%, -50%);
+    border-radius: 0.5rem;
+    padding: 2rem;
+    
+    box-shadow: 0 0 10px 5px rgba(44, 44, 44, 0.1);
+    .header{
+        font-size: 2rem;
+        font-weight: bold;
+        text-align: center;
+    }
+    .form{
+        margin-top: 3rem;
+    }
+  }
+}
