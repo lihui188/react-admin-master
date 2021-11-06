@@ -7,7 +7,7 @@
  */
 import React, { Component } from "react"
 import { BrowserRouter, Route, Switch } from "react-router-dom"
-import Layout from "./pages/Layout"
+import Index from "./pages/Index"
 import Login from "./pages/Login"
 
 import "./App.less"
@@ -19,7 +19,7 @@ export default class App extends Component {
         <Switch>
           {/* 只匹配其中一个路由 */}
           <Route path="/login" component={Login}></Route>
-          <Route path="/" component={Layout}></Route>
+          <Route path="/" component={Index}></Route>
         </Switch>
       </BrowserRouter>
     )
