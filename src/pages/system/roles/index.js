@@ -107,14 +107,14 @@ export default class Roles extends Component {
             新增
           </Button>
         </div>
-        <Table columns={columns} dataSource={data}  />
+        <Table columns={columns} dataSource={data} pagination={pagination} />
         {/* <Pagination
           showQuickJumper
           defaultCurrent={2}
           total={data.length}
           onChange={this.onChange}
         /> */}
-        <AddRole showModel={showModel} hiddenModel={this.hiddenModel} pagination={pagination} />
+        <AddRole showModel={showModel} hiddenModel={this.hiddenModel}  />
       </Card>
     )
   }
