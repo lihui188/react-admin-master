@@ -1,85 +1,53 @@
 import React, { Component } from "react"
-import { Card, Button, Input, Table, Tag, Space } from "antd"
+import { Card, Button, Input, Table, Space, Pagination } from "antd"
 import AddRole from "./components/addRoles"
+import { getPage } from "@/api/request/role"
 
 const columns = [
   {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
-    render: (text) => <a>{text}</a>,
+    title: "角色名称",
+    dataIndex: "role_name",
+    key: "role_name",
   },
   {
-    title: "Age",
-    dataIndex: "age",
-    key: "age",
+    title: "创建时间",
+    dataIndex: "created_at",
+    key: "created_at",
   },
   {
-    title: "Address",
-    dataIndex: "address",
-    key: "address",
-  },
-  {
-    title: "Tags",
-    key: "tags",
-    dataIndex: "tags",
-    render: (tags) => (
-      <>
-        {tags.map((tag) => {
-          let color = tag.length > 5 ? "geekblue" : "green"
-          if (tag === "loser") {
-            color = "volcano"
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          )
-        })}
-      </>
-    ),
-  },
-  {
-    title: "Action",
-    key: "action",
+    title: "操作",
+    key: "operation",
     render: (text, record) => (
       <Space size="middle">
-        <a>Invite {record.name}</a>
-        <a>Delete</a>
+        <a>编辑</a>
+        <a>删除</a>
       </Space>
     ),
-  },
-]
-const data = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-    tags: ["nice", "developer"],
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "London No. 1 Lake Park",
-    tags: ["loser"],
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "Sidney No. 1 Lake Park",
-    tags: ["cool", "teacher"],
   },
 ]
 export default class Roles extends Component {
   state = {
     showModel: false,
-    pagination: {
-      current: 1,
-      pageSize: 10,
-    },
+    total: 0,
+    page: 1,
+    size: 10,
+    rolesList: [],
+  }
+  componentDidMount = () => {
+    const { page, size } = this.state
+    this.getData(page, size)
+  }
+  getData = (page, size) => {
+    getPage({
+      page: page - 1,
+      size,
+    }).then((res) => {
+      let data = res.data
+      this.setState({
+        total: data.count,
+        rolesList: data.rows,
+      })
+    })
   }
   showModel = () => {
     this.setState({
@@ -92,10 +60,19 @@ export default class Roles extends Component {
     })
   }
   onChange = (pageNumber) => {
-    console.log("Page: ", pageNumber)
+    this.setState({
+      page: pageNumber,
+    })
+    this.getData(pageNumber, this.state.size)
+  }
+  onShowSizeChange=(current, pageSize)=>{
+    this.setState({
+      page:current,
+      size:pageSize
+    })
   }
   render() {
-    const { showModel,pagination} = this.state
+    const { showModel, rolesList } = this.state
     return (
       <Card title="角色管理">
         <div>
@@ -107,14 +84,23 @@ export default class Roles extends Component {
             新增
           </Button>
         </div>
-        <Table columns={columns} dataSource={data} pagination={pagination} />
-        {/* <Pagination
-          showQuickJumper
-          defaultCurrent={2}
-          total={data.length}
+        <Table
+          rowKey="id"
+          columns={columns}
+          dataSource={rolesList}
+          pagination={false}
+        />
+        <Pagination
+        showQuickJumper
+          defaultCurrent={1}
+          defaultPageSize={this.state.size}
+          onShowSizeChange={this.onShowSizeChange}
+          total={this.state.total}
+          hideOnSinglePage={false}
+          className="pagination"
           onChange={this.onChange}
-        /> */}
-        <AddRole showModel={showModel} hiddenModel={this.hiddenModel}  />
+        />
+        <AddRole showModel={showModel} hiddenModel={this.hiddenModel} />
       </Card>
     )
   }

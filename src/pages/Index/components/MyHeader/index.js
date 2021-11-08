@@ -1,36 +1,35 @@
 import React, { Component } from "react"
-import { UserOutlined, DownOutlined } from "@ant-design/icons"
+import {
+  UserOutlined,
+  SettingOutlined,
+  LogoutOutlined,
+} from "@ant-design/icons"
 import { Avatar, Breadcrumb, Menu, Dropdown } from "antd"
+
+import { storage } from "@/utils/storage"
 import "./less/index.less"
+import { Link } from "react-router-dom"
 export default class MyHeader extends Component {
+  logout = () => {
+    storage.clearMemoryPmt()
+  }
   render() {
     const menu = (
       <Menu>
-        <Menu.Item>
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://www.antgroup.com">
-            1st menu item
-          </a>
+        <Menu.Item key="1" icon={<UserOutlined />}>
+          个人中心
         </Menu.Item>
-        <Menu.Item icon={<DownOutlined />} disabled>
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://www.aliyun.com">
-            2nd menu item (disabled)
-          </a>
+        <Menu.Item key="2" icon={<SettingOutlined />}>
+          个人设置
         </Menu.Item>
-        <Menu.Item disabled>
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://www.luohanacademy.com">
-            3rd menu item (disabled)
-          </a>
+        <Menu.Divider />
+        <Menu.Item
+          key="3"
+          danger
+          icon={<LogoutOutlined />}
+          onClick={this.logout}>
+          <Link to="/login">退出登录</Link>
         </Menu.Item>
-        <Menu.Item danger>a danger item</Menu.Item>
       </Menu>
     )
     return (
@@ -45,7 +44,7 @@ export default class MyHeader extends Component {
           </Breadcrumb.Item>
           <Breadcrumb.Item>An Application</Breadcrumb.Item>
         </Breadcrumb>
-        <Dropdown overlay={menu}>
+        <Dropdown overlay={menu} placement="bottomLeft">
           <div>
             <Avatar icon={<UserOutlined />} />
             <span className="interval-left">admin</span>

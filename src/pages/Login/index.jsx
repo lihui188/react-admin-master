@@ -3,7 +3,7 @@ import "./css/index.less"
 import { Form, Input, Button, message } from "antd"
 import { UserOutlined, LockOutlined } from "@ant-design/icons"
 import { encrypt } from "../../utils/js-crypto"
-import { login } from "../../api/get_data/login"
+import { login } from "../../api/request/login"
 import { storage } from "../../utils/storage"
 import { Redirect } from "react-router-dom"
 

@@ -58,6 +58,7 @@ export function get(url, params = {}) {
         resolve(response.data)
       })
       .catch((error) => {
+        msag(error)
         reject(error)
       })
   })
