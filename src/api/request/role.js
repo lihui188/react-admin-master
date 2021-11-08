@@ -34,5 +34,17 @@ function getPage(data) {
     )
   })
 }
+function getRole(id) {
+  return new Promise((resolve, reject) => {
+    http("get", `/api/role/get/${id}`).then(
+      (res) => {
+        resolve(res)
+      },
+      (error) => {
+        reject(error)
+      }
+    )
+  })
+}
 
-export { add,getPage }
+export { add,getPage,getRole }

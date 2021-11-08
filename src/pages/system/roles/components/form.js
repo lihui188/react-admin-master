@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { Modal, Form, Input, message } from "antd"
 
-import { add } from "@/api/request/role"
+import { add, getRole } from "@/api/request/role"
 
 export default class AddRole extends Component {
   formRef = React.createRef()
@@ -9,29 +9,45 @@ export default class AddRole extends Component {
     let demo = this.formRef //通过refs属性可以获得对话框内form对象
     demo.current.validateFields().then((values) => {
       add(values).then((res) => {
-        message.success('添加成功')
+        message.success("添加成功")
         demo.current.resetFields()
-        this.props.hiddenModel()
+        this.setState({
+          isShowModel: false,
+        })
       })
     })
   }
   state = {
+    isShowModel: false,
+    isAdd: true,
     layout: {
       labelCol: { span: 6 },
       wrapperCol: { span: 18 },
     },
   }
+  setShowModel = (isAdd) => {
+    this.setState({
+      isShowModel: true,
+      isAdd,
+    })
+  }
   handleCancel = () => {
-    this.props.hiddenModel()
+    this.setState({
+      isShowModel: false,
+    })
+  }
+  getDetail = (id) => {
+    getRole(id).then(res=>{
+      console.log(res)
+    })
   }
   render() {
-    const { showModel } = this.props
-    const { layout } = this.state
+    const { layout, isShowModel, isAdd } = this.state
     return (
       <Modal
         width={400}
-        title="新增角色"
-        visible={showModel}
+        title={isAdd ? "新增角色" : "编辑角色"}
+        visible={isShowModel}
         onOk={this.handleOk}
         onCancel={this.handleCancel}
         cancelText="取消"
