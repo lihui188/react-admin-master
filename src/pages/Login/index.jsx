@@ -6,17 +6,11 @@ import { encrypt } from "../../utils/js-crypto"
 import { login } from "../../api/request/login"
 import { storage } from "../../utils/storage"
 import { Redirect } from "react-router-dom"
-
-// const
-/* .catch(err=>{
-    console.log(err.response)
-  }) 
-}*/
-
-/* const onFinishFailed = (errorInfo) => {
-  console.log("Failed:", errorInfo)
-} */
-export default class Login extends Component {
+//引入action
+import { saveUser } from "@/store/actions/user"
+//引入connect用于连接UI组件与redux
+import { connect } from "react-redux"
+class Login extends Component {
   onFinish = (values) => {
     login({
       username: values.username,
@@ -25,6 +19,7 @@ export default class Login extends Component {
       message.success("登录成功")
       storage.setMemoryPmt("token", res.token)
       storage.setMemoryPmt("userInfo", res.userInfo)
+      this.props.saveUser(res.userInfo)
       this.props.history.push("/")
     })
   }
@@ -103,3 +98,10 @@ export default class Login extends Component {
     )
   }
 }
+//使用connect()()创建并暴露一个Count的容器组件
+export default connect(
+  (state) => ({
+    user: state.user,
+  }),
+  { saveUser }
+)(Login)

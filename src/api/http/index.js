@@ -2,8 +2,14 @@
  * 网络请求配置
  */
 import axios from "axios"
-import { message, Modal } from "antd"
-import { storage } from "../../utils/storage"
+import { message } from "antd"
+import { storage } from "@/utils/storage"
+
+/* import { useHistory } from "react-router-dom"
+const history = useHistory() */
+// import { createBrowserHistory } from "history"
+// const history = createBrowserHistory() // history模式
+// const history = createHashHistory() // hash模式
 
 axios.defaults.timeout = 15000
 axios.defaults.baseURL = "http://localhost:3333"
@@ -164,16 +170,24 @@ function msag(err) {
         message.error(err.response.data.desc)
         break
       case 401:
-        Modal.error({
+        message.error("登录状态过期，请重新登录！")
+        storage.clearMemoryPmt()
+        setTimeout(() => {
+          window.location.href = "/login"
+        }, 1500)
+
+        /* Modal.error({
           title: "未授权，请登录",
           okText: "确认退出",
-          onOk() {
-            window.localStorage.clear()
+          onOk: () => {
+            setTimeout(() => {
+              window.location.href = "/login"
+            }, 500)
           },
-        })
+        }) */
         break
       case 403:
-        message.error("拒绝访问")
+        message.error("暂无权限，拒绝访问")
         break
       case 404:
         message.error("请求地址出错")
@@ -182,7 +196,7 @@ function msag(err) {
         message.error("请求超时")
         break
       case 500:
-        message.error("服务器内部错误")
+        message.error("服务器出错，请联系管理员")
         break
       case 501:
         message.error("服务未实现")

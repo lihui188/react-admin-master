@@ -9,7 +9,6 @@ import MyHeader from "./components/MyHeader/index"
 import "./less/index.less"
 
 // 引入页面组件
-
 import Welcome from "../welcome"
 import Menu from "../system/menu"
 import Roles from "../system/roles"
@@ -22,6 +21,9 @@ export default class Index extends Component {
   }
   onCollapse = (collapsed) => {
     this.setState({ collapsed })
+  }
+  componentWillUnmount = ()=>{
+    console.log('组件销毁')
   }
   render() {
     const { collapsed } = this.state

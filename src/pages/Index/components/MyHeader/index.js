@@ -1,17 +1,34 @@
 import React, { Component } from "react"
+import { withRouter } from "react-router-dom"
+
 import {
   UserOutlined,
   SettingOutlined,
   LogoutOutlined,
+  ExclamationCircleOutlined,
 } from "@ant-design/icons"
-import { Avatar, Breadcrumb, Menu, Dropdown } from "antd"
 
+import { Avatar, Breadcrumb, Menu, Dropdown, Modal } from "antd"
 import { storage } from "@/utils/storage"
 import "./less/index.less"
-import { Link } from "react-router-dom"
-export default class MyHeader extends Component {
+
+const { confirm } = Modal
+
+// import { Link } from "react-router-dom"
+class MyHeader extends Component {
   logout = () => {
-    storage.clearMemoryPmt()
+    confirm({
+      title: "删除数据",
+      icon: <ExclamationCircleOutlined />,
+      content: "是否确认删除该条数据？删除后无法恢复",
+      okText: "删除",
+      okType: "danger",
+      cancelText: "取消",
+      onOk: () => {
+        storage.clearMemoryPmt()
+        this.props.history.push("/login")
+      },
+    })
   }
   render() {
     const menu = (
@@ -28,7 +45,7 @@ export default class MyHeader extends Component {
           danger
           icon={<LogoutOutlined />}
           onClick={this.logout}>
-          <Link to="/login">退出登录</Link>
+          退出登录
         </Menu.Item>
       </Menu>
     )
@@ -54,3 +71,4 @@ export default class MyHeader extends Component {
     )
   }
 }
+export default withRouter(MyHeader)
