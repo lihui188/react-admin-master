@@ -46,5 +46,17 @@ function getRole(id) {
     )
   })
 }
+function delRole(data) {
+  return new Promise((resolve, reject) => {
+    http("post", `/api/role/del`,data).then(
+      (res) => {
+        resolve(res)
+      },
+      (error) => {
+        reject(error)
+      }
+    )
+  })
+}
 
-export { add,getPage,getRole }
+export { add,getPage,getRole,delRole }

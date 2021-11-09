@@ -4,6 +4,7 @@
 import axios from "axios"
 import { message, Modal } from "antd"
 import { storage } from "../../utils/storage"
+
 axios.defaults.timeout = 15000
 axios.defaults.baseURL = "http://localhost:3333"
 
@@ -166,9 +167,10 @@ function msag(err) {
         Modal.error({
           title: "未授权，请登录",
           okText: "确认退出",
-          // content: 'some messages...some messages...',
+          onOk() {
+            window.localStorage.clear()
+          },
         })
-        // message.error("未授权，请登录")
         break
       case 403:
         message.error("拒绝访问")

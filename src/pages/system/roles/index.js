@@ -1,7 +1,19 @@
 import React, { Component } from "react"
-import { Card, Button, Input, Table, Space, Pagination } from "antd"
+import {
+  Card,
+  Button,
+  Input,
+  Table,
+  Space,
+  Pagination,
+  message,
+  Modal,
+} from "antd"
+import { ExclamationCircleOutlined } from "@ant-design/icons"
 import AddRole from "./components/form"
-import { getPage } from "@/api/request/role"
+import { getPage, delRole } from "@/api/request/role"
+
+const { confirm } = Modal
 
 export default class Roles extends Component {
   form = React.createRef()
@@ -30,7 +42,7 @@ export default class Roles extends Component {
         render: (_, record) => (
           <Space size="middle">
             <a onClick={() => this.showEdit(record)}>编辑</a>
-            <a>删除</a>
+            <a onClick={() => this.deleteRole(record)}>删除</a>
           </Space>
         ),
       },
@@ -42,6 +54,30 @@ export default class Roles extends Component {
   showEdit = (row) => {
     this.form.current.setShowModel(false)
     this.form.current.getDetail(row.id)
+  }
+  deleteRole = (row) => {
+    confirm({
+      title: "删除数据",
+      icon: <ExclamationCircleOutlined />,
+      content: "是否确认删除该条数据？删除后无法恢复",
+      okText: "删除",
+      okType: "danger",
+      cancelText: "取消",
+      onOk: () => {
+        delRole({
+          ids: [row.id],
+        }).then((res) => {
+          message.success("删除成功")
+          this.getData(this.state.page, this.state.size)
+        })
+      },
+    })
+    /* delRole({
+      ids: [row.id],
+    }).then((res) => {
+      message.success("删除成功")
+      this.getData(this.state.page, this.state.size)
+    }) */
   }
   componentDidMount = () => {
     const { page, size } = this.state
