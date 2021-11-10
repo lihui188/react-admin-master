@@ -19,6 +19,7 @@ axios.defaults.baseURL = "http://localhost:3333"
  */
 axios.interceptors.request.use(
   (config) => {
+    message.loading("加载中", 0)
     config.data = JSON.stringify(config.data)
     config.headers = {
       "Content-Type": "application/json",
@@ -31,7 +32,8 @@ axios.interceptors.request.use(
     return config
   },
   (error) => {
-    message.error("网络出错，请检查设备联网状态")
+    // message.error("网络出错，请检查设备联网状态")
+    message.destroy()
     return Promise.reject(error)
   }
 )
@@ -41,9 +43,12 @@ axios.interceptors.request.use(
  */
 axios.interceptors.response.use(
   (response) => {
+    message.destroy()
+    message.success("加载完成", 1)
     return response
   },
   (error) => {
+    message.destroy()
     return Promise.reject(error)
   }
 )
@@ -175,16 +180,6 @@ function msag(err) {
         setTimeout(() => {
           window.location.href = "/login"
         }, 1500)
-
-        /* Modal.error({
-          title: "未授权，请登录",
-          okText: "确认退出",
-          onOk: () => {
-            setTimeout(() => {
-              window.location.href = "/login"
-            }, 500)
-          },
-        }) */
         break
       case 403:
         message.error("暂无权限，拒绝访问")
@@ -215,6 +210,11 @@ function msag(err) {
         break
       default:
     }
+  } else {
+    const regexp = new RegExp(/timeout/g)
+    regexp.test(err)
+      ? message.error("请求超时，请检查网络是否连通")
+      : message.error("网络出错，请检查设备联网状态")
   }
 }
 

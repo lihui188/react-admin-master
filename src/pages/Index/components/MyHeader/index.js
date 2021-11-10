@@ -18,10 +18,10 @@ const { confirm } = Modal
 class MyHeader extends Component {
   logout = () => {
     confirm({
-      title: "删除数据",
+      title: "退出登录",
       icon: <ExclamationCircleOutlined />,
-      content: "是否确认删除该条数据？删除后无法恢复",
-      okText: "删除",
+      content: "是否确认退出登录？",
+      okText: "确认退出",
       okType: "danger",
       cancelText: "取消",
       onOk: () => {
