@@ -19,7 +19,7 @@ axios.defaults.baseURL = "http://localhost:3333"
  */
 axios.interceptors.request.use(
   (config) => {
-    message.loading("加载中", 0)
+    // message.loading("加载中", 0)
     config.data = JSON.stringify(config.data)
     config.headers = {
       "Content-Type": "application/json",
@@ -33,7 +33,7 @@ axios.interceptors.request.use(
   },
   (error) => {
     // message.error("网络出错，请检查设备联网状态")
-    message.destroy()
+    // message.destroy()
     return Promise.reject(error)
   }
 )
@@ -43,12 +43,12 @@ axios.interceptors.request.use(
  */
 axios.interceptors.response.use(
   (response) => {
-    message.destroy()
-    message.success("加载完成", 1)
+    /* message.destroy()
+    message.success("加载完成", 1) */
     return response
   },
   (error) => {
-    message.destroy()
+    // message.destroy()
     return Promise.reject(error)
   }
 )

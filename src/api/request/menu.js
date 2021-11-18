@@ -22,6 +22,18 @@ function add(data) {
     )
   })
 }
+function getList(data) {
+    return new Promise((resolve, reject) => {
+      http("get", "/api/menu/list", data).then(
+        (res) => {
+          resolve(res)
+        },
+        (error) => {
+          reject(error)
+        }
+      )
+    })
+  }
 function getPage(data) {
   return new Promise((resolve, reject) => {
     http("get", "/api/role/page", data).then(
@@ -71,4 +83,4 @@ function edit(data) {
   })
 }
 
-export { add,getPage,getRole,delRole,edit }
+export { add,getPage,getRole,delRole,edit,getList }

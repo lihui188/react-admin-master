@@ -1,8 +1,8 @@
 import React, { Component } from "react"
-import { Modal, Form, Input, message } from "antd"
-
+import { Modal, Form, Input, message, Switch, TreeSelect } from "antd"
+import SelectIcon from '@/components/SelectIcon'
+import { SettingOutlined } from '@ant-design/icons';
 import { add, getRole, edit } from "@/api/request/role"
-
 export default class AddRole extends Component {
   formRef = React.createRef()
   handleOk = () => {
@@ -48,6 +48,9 @@ export default class AddRole extends Component {
       wrapperCol: { span: 18 },
     },
   }
+  onChange = (e) => {
+    console.log("radio checked", e.target.value)
+  }
   setShowModel = (isAdd) => {
     this.setState({
       isShowModel: true,
@@ -75,8 +78,8 @@ export default class AddRole extends Component {
     const { layout, isShowModel, isAdd } = this.state
     return (
       <Modal
-        width={400}
-        title={isAdd ? "新增角色" : "编辑角色"}
+        width={600}
+        title={isAdd ? "新增菜单" : "编辑菜单"}
         visible={isShowModel}
         onOk={this.handleOk}
         onCancel={this.handleCancel}
@@ -90,9 +93,45 @@ export default class AddRole extends Component {
           onFinish={this.onFinish}>
           <Form.Item
             name="roleName"
-            label="角色名称"
-            rules={[{ required: true, message: "角色名称不能为空" }]}>
-            <Input placeholder="请输入角色名称" />
+            label="菜单名称"
+            rules={[{ required: true, message: "菜单名称不能为空" }]}>
+            <Input placeholder="请输入菜单名称" />
+          </Form.Item>
+          <Form.Item
+            name="path"
+            label="路径"
+            rules={[{ required: true, message: "路径不能为空" }]}>
+            <Input placeholder="例如：/xxx/xxx" />
+          </Form.Item>
+          <Form.Item
+            name="isShow"
+            label="是否显示"
+            rules={[{ required: true, message: "路径不能为空" }]}
+            valuePropName="checked">
+            <Switch checkedChildren="是" unCheckedChildren="否" />
+          </Form.Item>
+          <Form.Item name="parentId" label="父级菜单">
+            <TreeSelect
+              placeholder="请选择"
+              dropdownStyle={{ maxHeight: 500, overflow: "auto" }}
+              treeData={[
+                {
+                  title: "Light",
+                  value: "light",
+                  children: [
+                    {
+                      title: "Bamboo",
+                      value: "bamboo",
+                    },
+                  ],
+                },
+              ]}
+            />
+          </Form.Item>
+          <Form.Item
+            name="icon"
+            label="图标选择">
+            <Input addonAfter={<SettingOutlined />} placeholder="请选择图标" />
           </Form.Item>
         </Form>
       </Modal>

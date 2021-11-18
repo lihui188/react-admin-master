@@ -20,7 +20,6 @@ export default class Roles extends Component {
   form = React.createRef()
   state = {
     showModel: false,
-
     total: 0,
     page: 1,
     size: 10,
@@ -29,13 +28,13 @@ export default class Roles extends Component {
     columns: [
       {
         title: "角色名称",
-        dataIndex: "role_name",
-        key: "role_name",
+        dataIndex: "roleName",
+        key: "roleName",
       },
       {
         title: "创建时间",
-        dataIndex: "created_at",
-        key: "created_at",
+        dataIndex: "createdAt",
+        key: "createdAt",
       },
       {
         title: "操作",
@@ -73,12 +72,6 @@ export default class Roles extends Component {
         })
       },
     })
-    /* delRole({
-      ids: [row.id],
-    }).then((res) => {
-      message.success("删除成功")
-      this.getData(this.state.page, this.state.size)
-    }) */
   }
   componentDidMount = () => {
     const { page, size } = this.state
@@ -103,6 +96,12 @@ export default class Roles extends Component {
     })
     this.getData(pageNumber, this.state.size)
   }
+  resetData = () => {
+    this.setState({
+      page: 1,
+    })
+    this.getData(1, this.state.size)
+  }
   onShowSizeChange = (current, pageSize) => {
     this.setState({
       page: current,
@@ -114,12 +113,18 @@ export default class Roles extends Component {
     return (
       <Card title="角色管理">
         <div>
-          <Input className="input-width" placeholder="角色名称" />
+          <Input className="input-width margin-box" placeholder="角色名称" />
           <Button
             className="margin-box"
             type="primary"
             onClick={this.showModel}>
             新增
+          </Button>
+          <Button
+            className="margin-box"
+            type="success"
+            onClick={this.resetData}>
+            刷新
           </Button>
         </div>
         <Table
@@ -138,7 +143,7 @@ export default class Roles extends Component {
           className="pagination"
           onChange={this.onChange}
         />
-        <AddRole ref={this.form} />
+        <AddRole ref={this.form} resetData={this.resetData} />
       </Card>
     )
   }
