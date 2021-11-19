@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { Modal, Form, Input, message, Switch, TreeSelect } from "antd"
-import SelectIcon from '@/components/SelectIcon'
-import { SettingOutlined } from '@ant-design/icons';
+import SelectIcon from "@/components/SelectIcon"
+import { SettingOutlined } from "@ant-design/icons"
 import { add, getRole, edit } from "@/api/request/role"
 export default class AddRole extends Component {
   formRef = React.createRef()
@@ -47,6 +47,8 @@ export default class AddRole extends Component {
       labelCol: { span: 6 },
       wrapperCol: { span: 18 },
     },
+    visible: false,
+    selecteditem: "",
   }
   onChange = (e) => {
     console.log("radio checked", e.target.value)
@@ -74,8 +76,25 @@ export default class AddRole extends Component {
       })
     })
   }
+  // 图标选择
+  selectIconOk = () => {
+    console.log("Ok")
+  }
+  selectIconCancel = () => {
+    this.setState({
+      visible: false,
+    })
+  }
+  selectIcon = (item) => {
+    console.log("选择icon", item)
+  }
+  showSelectIcon = () => {
+    this.setState({
+      visible: true,
+    })
+  }
   render() {
-    const { layout, isShowModel, isAdd } = this.state
+    const { layout, isShowModel, isAdd, visible, selecteditem } = this.state
     return (
       <Modal
         width={600}
@@ -128,12 +147,22 @@ export default class AddRole extends Component {
               ]}
             />
           </Form.Item>
-          <Form.Item
-            name="icon"
-            label="图标选择">
-            <Input addonAfter={<SettingOutlined />} placeholder="请选择图标" />
+          <Form.Item name="icon" label="图标选择">
+            {/* <Input placeholder="请选择图标" />
+            <Button type="primary" icon={<SettingOutlined />} ></Button> */}
+            <Input
+              addonAfter={<SettingOutlined onClick={this.showSelectIcon} />}
+              placeholder="请选择图标"
+            />
           </Form.Item>
         </Form>
+        <SelectIcon
+          visible={visible}
+          handleOk={this.selectIconOk}
+          handleCancel={this.selectIconCancel}
+          selecteditem={selecteditem}
+          selectIcon={this.selectIcon}
+        />
       </Modal>
     )
   }
