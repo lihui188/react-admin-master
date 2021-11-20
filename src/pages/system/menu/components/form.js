@@ -1,7 +1,16 @@
 import React, { Component } from "react"
-import { Modal, Form, Input, message, Switch, TreeSelect } from "antd"
+import {
+  Modal,
+  Form,
+  Input,
+  message,
+  Switch,
+  TreeSelect,
+  InputNumber,
+} from "antd"
 import SelectIcon from "@/components/SelectIcon"
-import { SettingOutlined } from "@ant-design/icons"
+import * as Icon from "@ant-design/icons"
+import { SettingOutlined, ExclamationOutlined } from "@ant-design/icons"
 import { add, getRole, edit } from "@/api/request/role"
 export default class AddRole extends Component {
   formRef = React.createRef()
@@ -49,6 +58,7 @@ export default class AddRole extends Component {
     },
     visible: false,
     selecteditem: "",
+    selectedIcon: "",
   }
   onChange = (e) => {
     console.log("radio checked", e.target.value)
@@ -78,7 +88,13 @@ export default class AddRole extends Component {
   }
   // 图标选择
   selectIconOk = () => {
-    console.log("Ok")
+    this.setState({
+      visible: false,
+      selectedIcon: this.state.selecteditem,
+    })
+    this.formRef.current.setFieldsValue({
+      icon: this.state.selecteditem,
+    })
   }
   selectIconCancel = () => {
     this.setState({
@@ -86,13 +102,24 @@ export default class AddRole extends Component {
     })
   }
   selectIcon = (item) => {
-    console.log("选择icon", item)
+    this.setState({
+      selecteditem: item,
+    })
   }
   showSelectIcon = () => {
     this.setState({
       visible: true,
     })
   }
+  changeNumber = (value) => {}
+  iconElement = () => {
+    if (this.state.selectedIcon) {
+      return React.createElement(Icon[this.state.selectedIcon])
+    } else {
+      return <ExclamationOutlined />
+    }
+  }
+
   render() {
     const { layout, isShowModel, isAdd, visible, selecteditem } = this.state
     return (
@@ -123,6 +150,16 @@ export default class AddRole extends Component {
             <Input placeholder="例如：/xxx/xxx" />
           </Form.Item>
           <Form.Item
+            name="sort"
+            label="排序"
+            initialValue="0"
+            rules={[
+              { type: "number", min: 0, max: 999 },
+              { required: true, message: "请输入0-999" },
+            ]}>
+            <InputNumber value="0" onChange={this.changeNumber} />
+          </Form.Item>
+          <Form.Item
             name="isShow"
             label="是否显示"
             rules={[{ required: true, message: "路径不能为空" }]}
@@ -150,7 +187,9 @@ export default class AddRole extends Component {
           <Form.Item name="icon" label="图标选择">
             {/* <Input placeholder="请选择图标" />
             <Button type="primary" icon={<SettingOutlined />} ></Button> */}
+            {/* {this.state.selectIcon && this.iconElement()} */}
             <Input
+              prefix={this.iconElement()}
               addonAfter={<SettingOutlined onClick={this.showSelectIcon} />}
               placeholder="请选择图标"
             />

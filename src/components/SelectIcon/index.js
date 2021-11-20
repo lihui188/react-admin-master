@@ -2,7 +2,7 @@ import React, { PureComponent } from "react"
 import { Modal, Tabs, Tooltip } from "antd"
 import classnames from "classnames"
 import * as Icon from "@ant-design/icons"
-import styles from "./less/index.less"
+import "./less/index.less"
 import icons from "./js/icon"
 const { TabPane } = Tabs
 
@@ -13,7 +13,6 @@ export default class IconModal extends PureComponent {
     // form
     const { visible, handleOk, handleCancel, selectIcon, selecteditem } =
       this.props
-
     return (
       <Modal
         title="图标选择"
@@ -25,7 +24,6 @@ export default class IconModal extends PureComponent {
         onCancel={handleCancel}>
         <Tabs defaultActiveKey="0">
           {Object.keys(icons).map((v, i) => {
-            console.log(v, i)
             return (
               <TabPane
                 tab={
@@ -53,7 +51,7 @@ export default class IconModal extends PureComponent {
                         }}
                         className={classnames({
                           icon: true,
-                          [styles.selectedicon]: item === selecteditem,
+                          selectedicon: item === selecteditem,
                         })}>
                         {this.createdIcon(item)}
                       </div>
@@ -63,81 +61,8 @@ export default class IconModal extends PureComponent {
               </TabPane>
             )
           })}
-
           {/* <TabPane tab="指示性图标" key="2">
             {suggestionIcons.map((item) => {
-              return (
-                <Tooltip title={item} text key={item}>
-                  <Icon
-                    type={item}
-                    className={classnames({
-                      icon: true,
-                      [styles.selectedicon]: item === selecteditem,
-                    })}
-                    onClick={() => {
-                      selectIcon(item)
-                    }}
-                  />
-                </Tooltip>
-              )
-            })}
-          </TabPane>
-          <TabPane tab="编辑类图标" key="3">
-            {editIcons.map((item) => {
-              return (
-                <Tooltip title={item} text key={item}>
-                  <Icon
-                    type={item}
-                    className={classnames({
-                      icon: true,
-                      [styles.selectedicon]: item === selecteditem,
-                    })}
-                    onClick={() => {
-                      selectIcon(item)
-                    }}
-                  />
-                </Tooltip>
-              )
-            })}
-          </TabPane>
-          <TabPane tab="数据类图标" key="4">
-            {dataIcons.map((item) => {
-              return (
-                <Tooltip title={item} text key={item}>
-                  <Icon
-                    type={item}
-                    className={classnames({
-                      icon: true,
-                      [styles.selectedicon]: item === selecteditem,
-                    })}
-                    onClick={() => {
-                      selectIcon(item)
-                    }}
-                  />
-                </Tooltip>
-              )
-            })}
-          </TabPane>
-          <TabPane tab="网站通用图标" key="5">
-            {webIcons.map((item) => {
-              return (
-                <Tooltip title={item} text key={item}>
-                  <Icon
-                    type={item}
-                    className={classnames({
-                      icon: true,
-                      [styles.selectedicon]: item === selecteditem,
-                    })}
-                    onClick={() => {
-                      selectIcon(item)
-                    }}
-                  />
-                </Tooltip>
-              )
-            })}
-          </TabPane>
-          <TabPane tab="品牌和标识" key="6">
-            {logoIcons.map((item) => {
               return (
                 <Tooltip title={item} text key={item}>
                   <Icon
