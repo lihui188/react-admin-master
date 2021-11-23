@@ -71,10 +71,14 @@ export default class AddRole extends Component {
       })
     })
   }
+  afterClosed = () => {
+    this.formRef.current.resetFields()
+  }
   render() {
     const { layout, isShowModel, isAdd } = this.state
     return (
       <Modal
+        afterClose={this.afterClosed}
         width={400}
         title={isAdd ? "新增角色" : "编辑角色"}
         visible={isShowModel}

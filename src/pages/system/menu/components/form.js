@@ -11,7 +11,7 @@ import {
 import SelectIcon from "@/components/SelectIcon"
 import * as Icon from "@ant-design/icons"
 import { SettingOutlined, ExclamationOutlined } from "@ant-design/icons"
-import { add, getRole, edit } from "@/api/request/role"
+import { add, getMenu, edit } from "@/api/request/menu"
 export default class AddRole extends Component {
   formRef = React.createRef()
   handleOk = () => {
@@ -59,6 +59,7 @@ export default class AddRole extends Component {
     visible: false,
     selecteditem: "",
     selectedIcon: "",
+    menuData: [],
   }
   onChange = (e) => {
     console.log("radio checked", e.target.value)
@@ -70,19 +71,20 @@ export default class AddRole extends Component {
     })
   }
   handleCancel = () => {
+    console.log("取消")
+
     this.setState({
       isShowModel: false,
     })
   }
   getDetail = (id) => {
-    getRole(id).then((res) => {
+    getMenu(id).then((res) => {
       let data = res.data
-      console.log(data)
       this.setState({
         formDetail: data,
       })
       this.formRef.current.setFieldsValue({
-        roleName: data.roleName,
+        menuName: data.menuName,
       })
     })
   }
@@ -111,7 +113,6 @@ export default class AddRole extends Component {
       visible: true,
     })
   }
-  changeNumber = (value) => {}
   iconElement = () => {
     if (this.state.selectedIcon) {
       return React.createElement(Icon[this.state.selectedIcon])
@@ -119,11 +120,30 @@ export default class AddRole extends Component {
       return <ExclamationOutlined />
     }
   }
-
+  afterClosed = () => {
+    this.setState({
+      selecteditem: "ExclamationOutlined",
+      selectedIcon: "",
+    })
+    this.formRef.current.resetFields()
+  }
+  formatTreeData = (data) => {
+    let item = []
+    data.forEach((list) => {
+      let newData = {}
+      newData.value = list.id
+      newData.title = list.menuName
+      newData.children = list.children ? this.formatTreeData(list.children) : [] // 如果还有子集，就再次调用自己
+      item.push(newData)
+    })
+    return item
+  }
   render() {
-    const { layout, isShowModel, isAdd, visible, selecteditem } = this.state
+    const { layout, isShowModel, isAdd, visible, selecteditem, menuData } =
+      this.state
     return (
       <Modal
+        afterClose={this.afterClosed}
         width={600}
         title={isAdd ? "新增菜单" : "编辑菜单"}
         visible={isShowModel}
@@ -138,7 +158,7 @@ export default class AddRole extends Component {
           ref={this.formRef}
           onFinish={this.onFinish}>
           <Form.Item
-            name="roleName"
+            name="menuName"
             label="菜单名称"
             rules={[{ required: true, message: "菜单名称不能为空" }]}>
             <Input placeholder="请输入菜单名称" />
@@ -152,16 +172,17 @@ export default class AddRole extends Component {
           <Form.Item
             name="sort"
             label="排序"
-            initialValue="0"
+            initialValue={0}
             rules={[
               { type: "number", min: 0, max: 999 },
               { required: true, message: "请输入0-999" },
             ]}>
-            <InputNumber value="0" onChange={this.changeNumber} />
+            <InputNumber />
           </Form.Item>
           <Form.Item
             name="isShow"
             label="是否显示"
+            initialValue={true}
             rules={[{ required: true, message: "路径不能为空" }]}
             valuePropName="checked">
             <Switch checkedChildren="是" unCheckedChildren="否" />
@@ -170,18 +191,8 @@ export default class AddRole extends Component {
             <TreeSelect
               placeholder="请选择"
               dropdownStyle={{ maxHeight: 500, overflow: "auto" }}
-              treeData={[
-                {
-                  title: "Light",
-                  value: "light",
-                  children: [
-                    {
-                      title: "Bamboo",
-                      value: "bamboo",
-                    },
-                  ],
-                },
-              ]}
+              allowClear
+              treeData={this.formatTreeData(menuData)}
             />
           </Form.Item>
           <Form.Item name="icon" label="图标选择">
@@ -193,6 +204,9 @@ export default class AddRole extends Component {
               addonAfter={<SettingOutlined onClick={this.showSelectIcon} />}
               placeholder="请选择图标"
             />
+          </Form.Item>
+          <Form.Item name="description" label="描述">
+            <Input placeholder="菜单描述" maxLength="200" />
           </Form.Item>
         </Form>
         <SelectIcon

@@ -12,7 +12,7 @@ import http from "../http"
  */
 function add(data) {
   return new Promise((resolve, reject) => {
-    http("post", "/api/role/add", data).then(
+    http("post", "/api/menu/add", data).then(
       (res) => {
         resolve(res)
       },
@@ -23,20 +23,20 @@ function add(data) {
   })
 }
 function getList(data) {
-    return new Promise((resolve, reject) => {
-      http("get", "/api/menu/list", data).then(
-        (res) => {
-          resolve(res)
-        },
-        (error) => {
-          reject(error)
-        }
-      )
-    })
-  }
+  return new Promise((resolve, reject) => {
+    http("get", "/api/menu/list", data).then(
+      (res) => {
+        resolve(res)
+      },
+      (error) => {
+        reject(error)
+      }
+    )
+  })
+}
 function getPage(data) {
   return new Promise((resolve, reject) => {
-    http("get", "/api/role/page", data).then(
+    http("get", "/api/menu/page", data).then(
       (res) => {
         resolve(res)
       },
@@ -46,9 +46,9 @@ function getPage(data) {
     )
   })
 }
-function getRole(id) {
+function getMenu(id) {
   return new Promise((resolve, reject) => {
-    http("get", `/api/role/get/${id}`).then(
+    http("get", `/api/menu/get/${id}`).then(
       (res) => {
         resolve(res)
       },
@@ -58,9 +58,9 @@ function getRole(id) {
     )
   })
 }
-function delRole(data) {
+function delMenu(data) {
   return new Promise((resolve, reject) => {
-    http("post", `/api/role/del`,data).then(
+    http("post", `/api/menu/del`, data).then(
       (res) => {
         resolve(res)
       },
@@ -72,7 +72,7 @@ function delRole(data) {
 }
 function edit(data) {
   return new Promise((resolve, reject) => {
-    http("post", `/api/role/edit`,data).then(
+    http("post", `/api/menu/edit`, data).then(
       (res) => {
         resolve(res)
       },
@@ -83,4 +83,4 @@ function edit(data) {
   })
 }
 
-export { add,getPage,getRole,delRole,edit,getList }
+export { add, getPage, getMenu, delMenu, edit, getList }

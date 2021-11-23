@@ -1,17 +1,10 @@
 import React, { Component } from "react"
-import {
-  Card,
-  Button,
-  Input,
-  Table,
-  Space,
-  message,
-  Modal,
-} from "antd"
+import { Card, Button, Input, Table, Space, message, Modal, Tag } from "antd"
 import { ExclamationCircleOutlined } from "@ant-design/icons"
 
 import AddRole from "./components/form"
-import { delRole,getList } from "@/api/request/menu"
+import { delMenu, getList } from "@/api/request/menu"
+import * as Icon from "@ant-design/icons"
 
 const { confirm } = Modal
 
@@ -22,7 +15,7 @@ export default class Roles extends Component {
     total: 0,
     page: 1,
     size: 10,
-    rolesList: [],
+    menuList: [],
     isAdd: true,
     columns: [
       {
@@ -34,11 +27,18 @@ export default class Roles extends Component {
         title: "图标",
         dataIndex: "icon",
         key: "icon",
+        render: (row) => {
+          return this.createdIcon(row)
+        },
       },
       {
         title: "是否显示",
         dataIndex: "isShow",
         key: "isShow",
+        render: (row) => {
+          let color = row ? "blue" : "green"
+          return <Tag color={color}>{row ? "是" : "否"}</Tag>
+        },
       },
       {
         title: "排序",
@@ -67,6 +67,14 @@ export default class Roles extends Component {
       },
     ],
   }
+
+  createdIcon = (item) => (item ? React.createElement(Icon[item]) : "")
+  /* return 
+    } else {
+      return ""
+    }
+  } */
+
   showModel = () => {
     this.form.current.setShowModel(true)
   }
@@ -83,7 +91,7 @@ export default class Roles extends Component {
       okType: "danger",
       cancelText: "取消",
       onOk: () => {
-        delRole({
+        delMenu({
           ids: [row.id],
         }).then((res) => {
           message.success("删除成功")
@@ -101,8 +109,9 @@ export default class Roles extends Component {
       let data = res.data
       this.setState({
         total: data.count,
-        rolesList: data.rows,
+        menuList: data.rows,
       })
+      this.form.current.state.menuData = data.rows
     })
   }
   resetData = () => {
@@ -112,7 +121,7 @@ export default class Roles extends Component {
     this.getData(1, this.state.size)
   }
   render() {
-    const { rolesList, columns } = this.state
+    const { menuList, columns } = this.state
     return (
       <Card title="菜单管理">
         <div>
@@ -133,8 +142,9 @@ export default class Roles extends Component {
         <Table
           rowKey="id"
           columns={columns}
-          dataSource={rolesList}
+          dataSource={menuList}
           pagination={false}
+          defaultExpandAllRows
         />
         {/* <Pagination
           showQuickJumper
