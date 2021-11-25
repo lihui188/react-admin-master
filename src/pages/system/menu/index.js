@@ -49,15 +49,21 @@ export default class Roles extends Component {
         title: "描述",
         dataIndex: "description",
         key: "description",
+        width: 200,
+        ellipsis: true,
       },
       {
         title: "创建时间",
         dataIndex: "createdAt",
         key: "createdAt",
+        width: 200,
+        ellipsis: true,
       },
       {
         title: "操作",
         key: "operation",
+        fixed: "right",
+        width: 150,
         render: (_, record) => (
           <Space size="middle">
             <a onClick={() => this.showEdit(record)}>编辑</a>
@@ -67,14 +73,7 @@ export default class Roles extends Component {
       },
     ],
   }
-
   createdIcon = (item) => (item ? React.createElement(Icon[item]) : "")
-  /* return 
-    } else {
-      return ""
-    }
-  } */
-
   showModel = () => {
     this.form.current.setShowModel(true)
   }
@@ -139,13 +138,30 @@ export default class Roles extends Component {
             刷新
           </Button>
         </div>
-        <Table
-          rowKey="id"
+        {menuList.length > 0 ? (
+          <Table
+            rowKey={"id"}
+            bordered
+            scroll={{ x: 1200 }}
+            columns={columns}
+            dataSource={menuList}
+            pagination={false}
+            expandable={{
+              defaultExpandAllRows: "true",
+            }}
+          />
+        ) : null}
+        {/*  <Table
+          rowKey={"id"}
+          bordered
+          scroll={{ x: 1200 }}
           columns={columns}
           dataSource={menuList}
           pagination={false}
-          defaultExpandAllRows
-        />
+          expandable = {{
+            defaultExpandAllRows:'true'
+          }}
+        /> */}
         {/* <Pagination
           showQuickJumper
           defaultCurrent={1}

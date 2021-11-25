@@ -62,7 +62,6 @@ export default class AddRole extends Component {
   getDetail = (id) => {
     getRole(id).then((res) => {
       let data = res.data
-      console.log(data)
       this.setState({
         formDetail: data,
       })

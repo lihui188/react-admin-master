@@ -28,23 +28,19 @@ export default class AddRole extends Component {
         })
       } else {
         let detail = this.state.formDetail
-        if (detail.roleName !== values.roleName) {
-          let params = {
-            id: detail.id,
-            roleName: values.roleName,
-          }
-          edit(params).then((res) => {
-            message.success("修改成功")
-            demo.current.resetFields()
-            this.setState({
-              isShowModel: false,
-              formDetail: {},
-            })
-            this.props.resetData()
-          })
-        } else {
-          message.warning("角色名称未修改")
+        let params = {
+          id: detail.id,
+          ...values,
         }
+        edit(params).then((res) => {
+          message.success("修改成功")
+          demo.current.resetFields()
+          this.setState({
+            isShowModel: false,
+            formDetail: {},
+          })
+          this.props.resetData()
+        })
       }
     })
   }
@@ -71,8 +67,6 @@ export default class AddRole extends Component {
     })
   }
   handleCancel = () => {
-    console.log("取消")
-
     this.setState({
       isShowModel: false,
     })
@@ -82,9 +76,15 @@ export default class AddRole extends Component {
       let data = res.data
       this.setState({
         formDetail: data,
+        selectedIcon: data.icon || "",
       })
       this.formRef.current.setFieldsValue({
         menuName: data.menuName,
+        path: data.path,
+        icon: data.icon,
+        isShow: data.isShow,
+        parentId: data.parentId,
+        description: data.description,
       })
     })
   }
