@@ -12,6 +12,7 @@ import "./less/index.less"
 import Welcome from "../welcome"
 import Menu from "../system/menu"
 import Roles from "../system/roles"
+import User from "../system/user"
 
 const { Header, Sider, Content } = Layout
 
@@ -46,6 +47,7 @@ export default class Index extends Component {
               <Route path="/welcome" component={Welcome}></Route>
               <Route path="/home/menu" component={Menu}></Route>
               <Route path="/home/roles" component={Roles}></Route>
+              <Route path="/home/user" component={User}></Route>
               <Redirect to="/welcome" />
             </Switch>
           </Content>

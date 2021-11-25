@@ -13,7 +13,7 @@ export default class MySider extends Component {
       <div className="my-sider dark">
         <div className={`sider-menu-logo dark`}>
           <a
-            href="https://ant.design/docs/react/introduce-cn"
+            href="https://ant.design/components/overview-cn/"
             target="_blank"
             rel="noopener noreferrer">
             <img src={antdSvg} alt="" />
@@ -26,10 +26,13 @@ export default class MySider extends Component {
           </Menu.Item>
           <SubMenu key="sub1" icon={<MailOutlined />} title="系统管理">
             <Menu.Item key="1">
-            <Link to="/home/menu">菜单管理</Link>
+              <Link to="/home/menu">菜单管理</Link>
             </Menu.Item>
             <Menu.Item key="3">
-            <Link to="/home/roles">角色管理</Link>
+              <Link to="/home/roles">角色管理</Link>
+            </Menu.Item>
+            <Menu.Item key="4">
+              <Link to="/home/user">用户管理</Link>
             </Menu.Item>
           </SubMenu>
         </Menu>
