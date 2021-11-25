@@ -1,9 +1,19 @@
 import React, { Component } from "react"
-import { Card, Button, Input, Table, Space, message, Modal, Tag } from "antd"
+import {
+  Card,
+  Button,
+  Input,
+  Table,
+  Space,
+  message,
+  Modal,
+  Tag,
+  Pagination,
+} from "antd"
 import { ExclamationCircleOutlined } from "@ant-design/icons"
 
 import AddRole from "./components/form"
-import { delMenu, getList } from "@/api/request/menu"
+import { delUser, getPage } from "@/api/request/user"
 import * as Icon from "@ant-design/icons"
 
 const { confirm } = Modal
@@ -15,24 +25,16 @@ export default class Roles extends Component {
     total: 0,
     page: 1,
     size: 10,
-    menuList: [],
+    tableList: [],
     isAdd: true,
     columns: [
       {
-        title: "菜单名称",
-        dataIndex: "menuName",
-        key: "menuName",
+        title: "用户名称",
+        dataIndex: "username",
+        key: "username",
       },
       {
-        title: "图标",
-        dataIndex: "icon",
-        key: "icon",
-        render: (row) => {
-          return this.createdIcon(row)
-        },
-      },
-      {
-        title: "是否显示",
+        title: "角色名称",
         dataIndex: "isShow",
         key: "isShow",
         render: (row) => {
@@ -41,14 +43,14 @@ export default class Roles extends Component {
         },
       },
       {
-        title: "排序",
-        dataIndex: "sort",
-        key: "sort",
+        title: "手机号",
+        dataIndex: "phone",
+        key: "phone",
       },
       {
-        title: "描述",
-        dataIndex: "description",
-        key: "description",
+        title: "个人签名",
+        dataIndex: "idiograph",
+        key: "idiograph",
         width: 200,
         ellipsis: true,
       },
@@ -90,7 +92,7 @@ export default class Roles extends Component {
       okType: "danger",
       cancelText: "取消",
       onOk: () => {
-        delMenu({
+        delUser({
           ids: [row.id],
         }).then((res) => {
           message.success("删除成功")
@@ -100,18 +102,28 @@ export default class Roles extends Component {
     })
   }
   componentDidMount = () => {
-    this.getData()
+    const { page, size } = this.state
+    this.getData(page, size)
   }
   // 获取分页数据
-  getData = () => {
-    getList().then((res) => {
+  // 获取分页数据
+  getData = (page, size) => {
+    getPage({
+      page: page - 1,
+      size,
+    }).then((res) => {
       let data = res.data
       this.setState({
         total: data.count,
-        menuList: data.rows,
+        tableList: data.rows,
       })
-      this.form.current.state.menuData = data.rows
     })
+  }
+  onChange = (pageNumber) => {
+    this.setState({
+      page: pageNumber,
+    })
+    this.getData(pageNumber, this.state.size)
   }
   resetData = () => {
     this.setState({
@@ -119,12 +131,18 @@ export default class Roles extends Component {
     })
     this.getData(1, this.state.size)
   }
+  onShowSizeChange = (page, size) => {
+    this.setState({
+      page,
+      size,
+    })
+  }
   render() {
-    const { menuList, columns } = this.state
+    const { tableList, columns } = this.state
     return (
-      <Card title="菜单管理">
+      <Card title="用户管理">
         <div>
-          <Input className="input-width margin-box" placeholder="角色名称" />
+          <Input className="input-width margin-box" placeholder="用户名称" />
           <Button
             className="margin-box"
             type="primary"
@@ -138,7 +156,7 @@ export default class Roles extends Component {
             刷新
           </Button>
         </div>
-        {menuList.length > 0 ? (
+        {/* {menuList.length > 0 ? (
           <Table
             rowKey={"id"}
             bordered
@@ -150,19 +168,16 @@ export default class Roles extends Component {
               defaultExpandAllRows: "true",
             }}
           />
-        ) : null}
-        {/*  <Table
+        ) : null} */}
+        <Table
           rowKey={"id"}
           bordered
           scroll={{ x: 1200 }}
           columns={columns}
-          dataSource={menuList}
+          dataSource={tableList}
           pagination={false}
-          expandable = {{
-            defaultExpandAllRows:'true'
-          }}
-        /> */}
-        {/* <Pagination
+        />
+        <Pagination
           showQuickJumper
           defaultCurrent={1}
           defaultPageSize={this.state.size}
@@ -171,7 +186,7 @@ export default class Roles extends Component {
           hideOnSinglePage={false}
           className="pagination"
           onChange={this.onChange}
-        /> */}
+        />
         <AddRole ref={this.form} resetData={this.resetData} />
       </Card>
     )

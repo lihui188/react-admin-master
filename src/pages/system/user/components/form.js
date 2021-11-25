@@ -1,17 +1,8 @@
 import React, { Component } from "react"
-import {
-  Modal,
-  Form,
-  Input,
-  message,
-  Switch,
-  TreeSelect,
-  InputNumber,
-} from "antd"
-import SelectIcon from "@/components/SelectIcon"
-import * as Icon from "@ant-design/icons"
-import { SettingOutlined, ExclamationOutlined } from "@ant-design/icons"
-import { add, getMenu, edit } from "@/api/request/menu"
+import { Modal, Form, Input, message, Select } from "antd"
+import { add, getUser, edit } from "@/api/request/user"
+
+const { Option } = Select
 export default class AddRole extends Component {
   formRef = React.createRef()
   handleOk = () => {
@@ -52,10 +43,6 @@ export default class AddRole extends Component {
       labelCol: { span: 6 },
       wrapperCol: { span: 18 },
     },
-    visible: false,
-    selecteditem: "",
-    selectedIcon: "",
-    menuData: [],
   }
   onChange = (e) => {
     console.log("radio checked", e.target.value)
@@ -72,7 +59,7 @@ export default class AddRole extends Component {
     })
   }
   getDetail = (id) => {
-    getMenu(id).then((res) => {
+    getUser(id).then((res) => {
       let data = res.data
       this.setState({
         formDetail: data,
@@ -88,38 +75,6 @@ export default class AddRole extends Component {
       })
     })
   }
-  // 图标选择
-  selectIconOk = () => {
-    this.setState({
-      visible: false,
-      selectedIcon: this.state.selecteditem,
-    })
-    this.formRef.current.setFieldsValue({
-      icon: this.state.selecteditem,
-    })
-  }
-  selectIconCancel = () => {
-    this.setState({
-      visible: false,
-    })
-  }
-  selectIcon = (item) => {
-    this.setState({
-      selecteditem: item,
-    })
-  }
-  showSelectIcon = () => {
-    this.setState({
-      visible: true,
-    })
-  }
-  iconElement = () => {
-    if (this.state.selectedIcon) {
-      return React.createElement(Icon[this.state.selectedIcon])
-    } else {
-      return <ExclamationOutlined />
-    }
-  }
   afterClosed = () => {
     this.setState({
       selecteditem: "ExclamationOutlined",
@@ -127,20 +82,11 @@ export default class AddRole extends Component {
     })
     this.formRef.current.resetFields()
   }
-  formatTreeData = (data) => {
-    let item = []
-    data.forEach((list) => {
-      let newData = {}
-      newData.value = list.id
-      newData.title = list.menuName
-      newData.children = list.children ? this.formatTreeData(list.children) : [] // 如果还有子集，就再次调用自己
-      item.push(newData)
-    })
-    return item
+  handleChange = (value) => {
+    console.log(`selected ${value}`)
   }
   render() {
-    const { layout, isShowModel, isAdd, visible, selecteditem, menuData } =
-      this.state
+    const { layout, isShowModel, isAdd } = this.state
     return (
       <Modal
         afterClose={this.afterClosed}
@@ -158,26 +104,30 @@ export default class AddRole extends Component {
           ref={this.formRef}
           onFinish={this.onFinish}>
           <Form.Item
-            name="menuName"
-            label="菜单名称"
-            rules={[{ required: true, message: "菜单名称不能为空" }]}>
+            name="username"
+            label="用户名"
+            rules={[{ required: true, message: "用户名不能为空" }]}>
             <Input placeholder="请输入菜单名称" />
           </Form.Item>
-          <Form.Item
-            name="path"
-            label="路径"
-            rules={[{ required: true, message: "路径不能为空" }]}>
-            <Input placeholder="例如：/xxx/xxx" />
+          <Form.Item name="phone" label="手机号">
+            <Input placeholder="请输入手机号" />
           </Form.Item>
           <Form.Item
             name="sort"
             label="排序"
             initialValue={0}
             rules={[
-              { type: "number", min: 0, max: 999 },
-              { required: true, message: "请输入0-999" },
+              {
+                min: 6,
+                message: "最少6位字符！",
+              },
+              {
+                max: 16,
+                message: "最大16位字符！",
+              },
+              { required: true, message: "请输入6-16位密码" },
             ]}>
-            <InputNumber />
+            <Input />
           </Form.Item>
           <Form.Item
             name="isShow"
@@ -185,37 +135,19 @@ export default class AddRole extends Component {
             initialValue={true}
             rules={[{ required: true, message: "路径不能为空" }]}
             valuePropName="checked">
-            <Switch checkedChildren="是" unCheckedChildren="否" />
-          </Form.Item>
-          <Form.Item name="parentId" label="父级菜单">
-            <TreeSelect
-              placeholder="请选择"
-              dropdownStyle={{ maxHeight: 500, overflow: "auto" }}
-              allowClear
-              treeData={this.formatTreeData(menuData)}
-            />
-          </Form.Item>
-          <Form.Item name="icon" label="图标选择">
-            {/* <Input placeholder="请选择图标" />
-            <Button type="primary" icon={<SettingOutlined />} ></Button> */}
-            {/* {this.state.selectIcon && this.iconElement()} */}
-            <Input
-              prefix={this.iconElement()}
-              addonAfter={<SettingOutlined onClick={this.showSelectIcon} />}
-              placeholder="请选择图标"
-            />
-          </Form.Item>
-          <Form.Item name="description" label="描述">
-            <Input placeholder="菜单描述" maxLength="200" />
+            <Select
+              defaultValue="lucy"
+              style={{ width: 120 }}
+              onChange={this.handleChange}>
+              <Option value="jack">Jack</Option>
+              <Option value="lucy">Lucy</Option>
+              <Option value="disabled" disabled>
+                Disabled
+              </Option>
+              <Option value="Yiminghe">yiminghe</Option>
+            </Select>
           </Form.Item>
         </Form>
-        <SelectIcon
-          visible={visible}
-          handleOk={this.selectIconOk}
-          handleCancel={this.selectIconCancel}
-          selecteditem={selecteditem}
-          selectIcon={this.selectIcon}
-        />
       </Modal>
     )
   }

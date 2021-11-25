@@ -23,8 +23,8 @@ export default class Index extends Component {
   onCollapse = (collapsed) => {
     this.setState({ collapsed })
   }
-  componentWillUnmount = ()=>{
-    console.log('组件销毁')
+  componentWillUnmount = () => {
+    console.log("组件销毁")
   }
   render() {
     const { collapsed } = this.state
@@ -41,7 +41,7 @@ export default class Index extends Component {
           <Header style={{ padding: 0 }}>
             <MyHeader />
           </Header>
-          <Content style={{padding:'15px'}}>
+          <Content style={{ padding: "15px" }}>
             {/* <MyContent /> */}
             <Switch>
               <Route path="/welcome" component={Welcome}></Route>
