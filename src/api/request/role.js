@@ -70,5 +70,17 @@ function edit(data) {
     )
   })
 }
+function list() {
+  return new Promise((resolve, reject) => {
+    http("get", `/api/role/list`).then(
+      (res) => {
+        resolve(res)
+      },
+      (error) => {
+        reject(error)
+      }
+    )
+  })
+}
 
-export { add,getPage,getRole,delRole,edit }
+export { add,getPage,getRole,delRole,edit,list }

@@ -150,7 +150,16 @@ export default class Roles extends Component {
               defaultExpandAllRows: "true",
             }}
           />
-        ) : null}
+        ) : (
+          <Table
+            rowKey={"id"}
+            bordered
+            scroll={{ x: 1200 }}
+            columns={columns}
+            dataSource={[]}
+            pagination={false}
+          />
+        )}
         {/*  <Table
           rowKey={"id"}
           bordered

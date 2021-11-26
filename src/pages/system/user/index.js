@@ -35,11 +35,11 @@ export default class Roles extends Component {
       },
       {
         title: "角色名称",
-        dataIndex: "isShow",
-        key: "isShow",
+        dataIndex: "role",
+        key: "role",
         render: (row) => {
-          let color = row ? "blue" : "green"
-          return <Tag color={color}>{row ? "是" : "否"}</Tag>
+          let color = "blue"
+          return <Tag color={color}>{row.roleName}</Tag>
         },
       },
       {
@@ -60,6 +60,12 @@ export default class Roles extends Component {
         key: "createdAt",
         width: 200,
         ellipsis: true,
+      },
+      {
+        title: "启用状态",
+        dataIndex: "userStatus",
+        key: "userStatus",
+        width: 200,
       },
       {
         title: "操作",
