@@ -22,11 +22,13 @@ export default class Roles extends Component {
         title: "菜单名称",
         dataIndex: "menuName",
         key: "menuName",
+        width: 200,
       },
       {
         title: "图标",
         dataIndex: "icon",
         key: "icon",
+        width: 100,
         render: (row) => {
           return this.createdIcon(row)
         },
@@ -35,6 +37,7 @@ export default class Roles extends Component {
         title: "是否显示",
         dataIndex: "isShow",
         key: "isShow",
+        width: 150,
         render: (row) => {
           let color = row ? "blue" : "green"
           return <Tag color={color}>{row ? "是" : "否"}</Tag>
@@ -44,12 +47,26 @@ export default class Roles extends Component {
         title: "排序",
         dataIndex: "sort",
         key: "sort",
+        width: 150,
+      },
+      {
+        title: "页面路径",
+        dataIndex: "path",
+        key: "path",
+        width: 150,
+        ellipsis: true,
+      },
+      {
+        title: "组件路径",
+        dataIndex: "comPath",
+        key: "comPath",
+        width: 150,
+        ellipsis: true,
       },
       {
         title: "描述",
         dataIndex: "description",
         key: "description",
-        width: 200,
         ellipsis: true,
       },
       {
@@ -114,10 +131,7 @@ export default class Roles extends Component {
     })
   }
   resetData = () => {
-    this.setState({
-      page: 1,
-    })
-    this.getData(1, this.state.size)
+    this.getData()
   }
   render() {
     const { menuList, columns } = this.state

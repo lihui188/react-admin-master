@@ -165,7 +165,7 @@ export default class Roles extends Component {
     })
     return item
   }
-  onCheck = (checkedKeys) => {
+  onCheck = (checkedKeys,info) => {
     this.setState({
       checkedKeys,
     })
@@ -227,9 +227,9 @@ export default class Roles extends Component {
               "菜单分配" + (currentRole ? " --- " + currentRole.roleName : "")
             }
             extra={
-              <a href="#" onClick={this.saveAssginMenu}>
+              <Button onClick={this.saveAssginMenu}>
                 保存
-              </a>
+              </Button>
             }>
             {treeData.length > 0 ? (
               <Tree

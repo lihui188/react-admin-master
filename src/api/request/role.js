@@ -82,5 +82,17 @@ function list() {
     )
   })
 }
+function getRoleMenu() {
+  return new Promise((resolve, reject) => {
+    http("get", "/api/role/menu").then(
+      (res) => {
+        resolve(res)
+      },
+      (error) => {
+        reject(error)
+      }
+    )
+  })
+}
 
-export { add,getPage,getRole,delRole,edit,list }
+export { add,getPage,getRole,delRole,edit,list,getRoleMenu }

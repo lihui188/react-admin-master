@@ -1,8 +1,18 @@
-const directionIcons = ["PicRightOutlined", "MenuUnfoldOutlined"]
-const suggestionIcons = ["QuestionCircleOutlined", "PlusOutlined"]
+const directionIcons = [
+  "StepBackwardOutlined",
+  "StepForwardOutlined",
+  "FastBackwardOutlined",
+  "FastForwardOutlined",
+  "ShrinkOutlined",
+]
+const suggestionIcons = [
+  "QuestionCircleOutlined",
+  "PlusOutlined",
+  "ExclamationCircleOutlined",
+]
 const editIcons = ["FormOutlined", "AlignLeftOutlined"]
 const dataIcons = ["AreaChartOutlined", "RadarChartOutlined"]
-const webIcons = ["GithubOutlined", "LinkedinOutlined"]
+const webIcons = ["GithubOutlined", "LinkedinOutlined", "RocketOutlined"]
 const logoIcons = ["AimOutlined"]
 const icons = {
   directionIcons,

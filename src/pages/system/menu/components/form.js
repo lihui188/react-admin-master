@@ -20,7 +20,6 @@ export default class AddRole extends Component {
       if (this.state.isAdd) {
         add(values).then((res) => {
           message.success("添加成功")
-          demo.current.resetFields()
           this.setState({
             isShowModel: false,
           })
@@ -34,7 +33,6 @@ export default class AddRole extends Component {
         }
         edit(params).then((res) => {
           message.success("修改成功")
-          demo.current.resetFields()
           this.setState({
             isShowModel: false,
             formDetail: {},
@@ -78,10 +76,13 @@ export default class AddRole extends Component {
         formDetail: data,
         selectedIcon: data.icon || "",
       })
+      console.log(data)
       this.formRef.current.setFieldsValue({
         menuName: data.menuName,
         path: data.path,
+        comPath: data.comPath,
         icon: data.icon,
+        sort:data.sort,
         isShow: data.isShow,
         parentId: data.parentId,
         description: data.description,
@@ -165,14 +166,17 @@ export default class AddRole extends Component {
           </Form.Item>
           <Form.Item
             name="path"
-            label="路径"
-            rules={[{ required: true, message: "路径不能为空" }]}>
+            label="页面路径">
+            <Input placeholder="例如：/xxx/xxx" />
+          </Form.Item>
+          <Form.Item
+            name="comPath"
+            label="组件路径">
             <Input placeholder="例如：/xxx/xxx" />
           </Form.Item>
           <Form.Item
             name="sort"
             label="排序"
-            initialValue={0}
             rules={[
               { type: "number", min: 0, max: 999 },
               { required: true, message: "请输入0-999" },
